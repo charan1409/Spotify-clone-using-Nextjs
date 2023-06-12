@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  background-color: black;
+}
+
+.layout{
+  display: flex;
+  flex-direction: row;
+  max-height: 87vh;
+  padding: 6px;
+}
+
+.layout .home_playtlist_section{
+  display: flex;
+  flex-direction: column;
+  flex: 1.5;
+  max-height: calc(87vh - 12px);
+}
+
+.layout .pages_section{
+  flex: 4;
+  max-height: calc(87vh - 12px);
+  width: 100%;
+  background-color: #121212;
+  border-radius: 10px;
+  margin-left: .5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.songtrackSection{
+  height: calc(100vh - 87vh);
+  width: 100%;
+  background-color: #000000;
+  padding: 0px 20px 6px 20px;
+  position: fixed;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .layout .home_playtlist_section{
+    flex: .85;
+  }
+
+  .layout .pages_section{
+    flex: 1;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .layout .home_playtlist_section{
+    flex: .7;
+  }
+
+  .layout .pages_section{
+    flex: 1;
+  }
+}
+
+::-webkit-scrollbar {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #282828;
+  border-radius: 5px;
+}
