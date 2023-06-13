@@ -1,6 +1,21 @@
+"use client";
 import styles from "./PlaylistSection.module.css";
+import { useState, useEffect, useRef } from "react";
 
 const PlaylistSection = () => {
+  const [submenu, setSubmenu] = useState(false);
+  const submenuRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (submenuRef.current && !submenuRef.current.contains(e.target)) {
+        setSubmenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
   return (
     <div className={styles.playlist_section}>
       <div className={styles.nav_bar}>
@@ -12,7 +27,19 @@ const PlaylistSection = () => {
             Your Library
           </p>
           <span className={styles.right_icons}>
-            <i className={`bi bi-plus ${styles.add}`}></i>
+            <i
+              className={`bi bi-plus ${styles.add}`}
+              onClick={() => setSubmenu((prev) => !prev)}
+            >
+              {submenu && (
+                <div className={styles.submenu} ref={submenuRef}>
+                  <ul>
+                    <li>Create a new playlist</li>
+                    <li>Create a playlist folder</li>
+                  </ul>
+                </div>
+              )}
+            </i>
             <i className={`bi bi-arrow-right-short ${styles.arrow}`}></i>
           </span>
         </div>

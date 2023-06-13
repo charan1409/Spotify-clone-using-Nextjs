@@ -77,3 +77,41 @@
 .right_section span i{
     font-size: 18px;
 }
+
+.profile_btn{
+    position: relative;
+}
+
+.submenu{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 150px;
+    background-color: #282828;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    margin-top: 8px;
+    overflow: hidden;
+    /* display: none; */
+}
+
+.submenu ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.submenu li{
+    text-align: left;
+    list-style: none;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100%;
+}
+
+.submenu li:hover{
+    background-color: #3e3e3e;
+}

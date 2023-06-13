@@ -27,8 +27,8 @@ const SongTrack = () => {
         </div>
       </div>
       <div className={styles.song_options}>
-        <i className="bi bi-music-note"></i>
-        <i className="bi bi-music-note-list"></i>
+        <i className="bi bi-music-note" title="lyrics"></i>
+        <i className="bi bi-music-note-list" title="queue"></i>
         <i className="bi bi-volume-up-fill"></i>
         <div className={styles.volume_line}></div>
       </div>
