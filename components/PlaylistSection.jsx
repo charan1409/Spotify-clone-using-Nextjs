@@ -1,10 +1,12 @@
 "use client";
 import styles from "./PlaylistSection.module.css";
 import { useState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
 
 const PlaylistSection = () => {
   const [submenu, setSubmenu] = useState(false);
   const submenuRef = useRef(null);
+  const { data: session } = useSession();
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (submenuRef.current && !submenuRef.current.contains(e.target)) {
@@ -30,9 +32,10 @@ const PlaylistSection = () => {
             <i
               className={`bi bi-plus ${styles.add}`}
               onClick={() => setSubmenu((prev) => !prev)}
+              ref={submenuRef}
             >
               {submenu && (
-                <div className={styles.submenu} ref={submenuRef}>
+                <div className={styles.submenu}>
                   <ul>
                     <li>Create a new playlist</li>
                     <li>Create a playlist folder</li>
@@ -61,62 +64,6 @@ const PlaylistSection = () => {
           </div>
         </div>
         <div className={styles.playlists}>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
           <div className={styles.playlist}>
             <img
               src="https://picsum.photos/60"

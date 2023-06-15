@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import HomeSection from "@/components/HomeSection";
 import PlaylistSection from "@/components/PlaylistSection";
 import SongTrack from "@/components/SongTrack";
+import Provider from "@/components/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,16 +22,18 @@ export default function RootLayout({ children }) {
         ></link>
       </head>
       <body className={inter.className}>
-        <div className="layout">
-          <div className="home_playtlist_section">
-            <HomeSection />
-            <PlaylistSection />
+        <Provider>
+          <div className="layout">
+            <div className="home_playtlist_section">
+              <HomeSection />
+              <PlaylistSection />
+            </div>
+            <div className="pages_section">{children}</div>
           </div>
-          <div className="pages_section">{children}</div>
-        </div>
-        <div className="songtrackSection">
-          <SongTrack />
-        </div>
+          <div className="songtrackSection">
+            <SongTrack />
+          </div>
+        </Provider>
       </body>
     </html>
   );
