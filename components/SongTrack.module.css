@@ -15,6 +15,11 @@
   gap: 20px;
   width: 100%;
   padding: 4px;
+  visibility: hidden;
+}
+
+.song_info .active{
+  visibility: visible;
 }
 
 .songtrack .player_track {
@@ -39,7 +44,7 @@
 
 .songtrack .player_track .options i {
   font-size: 20px;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
 .songtrack .player_track .options i:hover {
@@ -97,8 +102,46 @@
   color: #fff;
 }
 
-.songtrack .song_info .volume_line {
-  height: 3px;
-  flex-grow: 1;
+.signInBlock{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #ff00cc, #3333ff);
+  color: #fff;
+}
+
+.signInBlock .text{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  padding: 4px;
+}
+
+.signInBlock .text h3{
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.signInBlock .text p{
+  font-size: 16px;
+  font-weight: 200;
+  margin-bottom: 30px;
+}
+
+.signInBtn{
+  padding: 10px 30px;
+  border-radius: 30px;
   background-color: #fff;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-right: 30px;
 }

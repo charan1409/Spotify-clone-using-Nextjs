@@ -31,49 +31,67 @@ const PlaylistSection = () => {
           <span className={styles.right_icons}>
             <i
               className={`bi bi-plus ${styles.add}`}
-              onClick={() => setSubmenu((prev) => !prev)}
+              title="create new playlist"
+            ></i>
+          </span>
+        </div>
+        {session?.user && (
+          <div className={styles.options}>
+            <p className={styles.options_button}>Playlists</p>
+            <p className={styles.options_button}>Artists</p>
+          </div>
+        )}
+      </div>
+      {session?.user && session.user.playlists ? (
+        <div className={styles.playlists_artists}>
+          <div className={styles.top_bar}>
+            <span className={styles.search_icon}>
+              <i className="bi bi-search"></i>
+            </span>
+            <div
+              className={styles.sort_options}
               ref={submenuRef}
+              onClick={() => setSubmenu((prev) => !prev)}
             >
+              <p className={styles.sort_option}>Recents</p>
+              <span className={styles.options_arrow}>
+                <i
+                  className={
+                    submenu ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"
+                  }
+                ></i>
+              </span>
               {submenu && (
                 <div className={styles.submenu}>
                   <ul>
-                    <li>Create a new playlist</li>
-                    <li>Create a playlist folder</li>
+                    <li>Recents</li>
+                    <li>Recently Added</li>
+                    <li>Alphabetical</li>
                   </ul>
                 </div>
               )}
-            </i>
-            <i className={`bi bi-arrow-right-short ${styles.arrow}`}></i>
-          </span>
-        </div>
-        <div className={styles.options}>
-          <p className={styles.options_button}>Playlists</p>
-          <p className={styles.options_button}>Artists</p>
-        </div>
-      </div>
-      <div className={styles.playlists_artists}>
-        <div className={styles.top_bar}>
-          <span className={styles.search_icon}>
-            <i className="bi bi-search"></i>
-          </span>
-          <div className={styles.sort_options}>
-            <p className={styles.sort_option}>Recents</p>
-            <span className={styles.options_arrow}>
-              <i className="bi bi-caret-down-fill"></i>
-            </span>
+            </div>
+          </div>
+          <div className={styles.playlists}>
+            {session.user.playlists.map((playlist) => (
+              <div className={styles.playlist} key={playlist.id}>
+                <img
+                  src="https://picsum.photos/60"
+                  alt="playlist"
+                  className={styles.playlist_image}
+                />
+                <p className={styles.playlist_name}>{playlist.name}</p>
+              </div>
+            ))}
           </div>
         </div>
-        <div className={styles.playlists}>
-          <div className={styles.playlist}>
-            <img
-              src="https://picsum.photos/60"
-              alt="playlist"
-              className={styles.playlist_image}
-            />
-            <p className={styles.playlist_name}>Playlist name</p>
-          </div>
+      ) : (
+        <div className={styles.createPlaylist}>
+          <h4>Create your first playlist</h4>
+          <p>It's easy - we'll help you.</p>
+          <button className={styles.createButton}>Create Playlist</button>
         </div>
-      </div>
+      )}
     </div>
   );
 };
