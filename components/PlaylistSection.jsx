@@ -5,12 +5,17 @@ import { useSession } from "next-auth/react";
 
 const PlaylistSection = () => {
   const [submenu, setSubmenu] = useState(false);
+  const [loginPopup, setLoginPopup] = useState(false);
   const submenuRef = useRef(null);
+  const loginPopupRef = useRef(null);
   const { data: session } = useSession();
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (submenuRef.current && !submenuRef.current.contains(e.target)) {
         setSubmenu(false);
+      }
+      if (loginPopupRef.current && !loginPopupRef.current.contains(e.target)) {
+        setLoginPopup(false);
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
@@ -32,6 +37,7 @@ const PlaylistSection = () => {
             <i
               className={`bi bi-plus ${styles.add}`}
               title="create new playlist"
+              onClick={() => setLoginPopup(true)}
             ></i>
           </span>
         </div>
@@ -89,7 +95,33 @@ const PlaylistSection = () => {
         <div className={styles.createPlaylist}>
           <h4>Create your first playlist</h4>
           <p>It's easy - we'll help you.</p>
-          <button className={styles.createButton}>Create Playlist</button>
+          <button
+            className={styles.createButton}
+            onClick={() => setLoginPopup(true)}
+          >
+            Create Playlist
+          </button>
+        </div>
+      )}
+      {!session?.user && loginPopup && (
+        <div className={styles.login_popup} ref={loginPopupRef}>
+          <div className={styles.login_popup_content}>
+            <div className={styles.login_popup_header}>
+              <h4 className={styles.login_popup_heading}>Login</h4>
+              <span
+                className={styles.login_popup_close}
+                onClick={() => setLoginPopup(false)}
+              >
+                &times;
+              </span>
+            </div>
+            <div className={styles.login_popup_body}>
+              <p className={styles.login_popup_text}>
+                To create a playlist, you need to login first.
+              </p>
+              <button className={styles.login_popup_button}>Login</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

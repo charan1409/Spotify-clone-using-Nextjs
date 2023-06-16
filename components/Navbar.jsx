@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const submenuRef = useRef(null);
   const { data: session } = useSession();
@@ -30,13 +30,23 @@ const Navbar = () => {
 
   return (
     <div className={styles.navigational_bar}>
-      <div className={styles.navigational_arrows}>
-        <span>
-          <i className="bi bi-chevron-left"></i>
-        </span>
-        <span>
-          <i className="bi bi-chevron-right"></i>
-        </span>
+      <div className={styles.left_section}>
+        <div className={styles.navigational_arrows}>
+          <span>
+            <i className="bi bi-chevron-left"></i>
+          </span>
+          <span>
+            <i className="bi bi-chevron-right"></i>
+          </span>
+        </div>
+        {props.page === "search" && (
+          <div className={styles.searchBar}>
+            <span className={styles.search_icon}>
+              <i className="bi bi-search"></i>
+            </span>
+            <input type="text" placeholder="What do you want to listen?" />
+          </div>
+        )}
       </div>
       {session?.user ? (
         <div className={styles.right_section}>

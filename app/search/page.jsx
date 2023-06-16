@@ -1,5 +1,12 @@
+import Navbar from "@/components/Navbar";
+
 const page = () => {
-  return <div style={{ color: "white" }}>this is the search page.</div>;
+  return (
+    <>
+      <Navbar page={"search"}/>
+      <div style={{ color: "white" }}>this is the search page.</div>
+    </>
+  )
 };
 
 export default page;

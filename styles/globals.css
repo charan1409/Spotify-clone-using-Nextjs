@@ -33,6 +33,8 @@ a{
 .layout .pages_section{
   flex: 4;
   max-height: calc(87vh - 12px);
+  min-height: calc(87vh - 12px);
+  max-width: 100%;
   width: 100%;
   background-color: #121212;
   border-radius: 10px;
