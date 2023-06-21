@@ -292,11 +292,36 @@
   margin-bottom: 10px;
 }
 
+.loginPopupBtns{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.not_now_button{
+  font-size: 16px;
+  margin-right: 10px;
+  padding: 10px 10px;
+  border-radius: 20px;
+  margin-top: 15px;
+  text-align: center;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+  color: #d7d2d2;
+  border: none;
+  background-color: transparent;
+}
+
+.not_now_button:hover{
+  color: #fff;
+}
+
 .login_popup_button{
   background-color: #fff;
   font-size: 16px;
   margin-right: 10px;
-  margin-left: auto;
   padding: 10px 15px;
   border-radius: 20px;
   margin-top: 15px;

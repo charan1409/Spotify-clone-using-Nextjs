@@ -10,9 +10,6 @@ const userSchema = new Schema({
   image: {
     type: String,
   },
-  spotifyId: {
-    type: String,
-  },
   playlists: [
     {
       type: Schema.Types.ObjectId,
@@ -38,7 +35,7 @@ const userSchema = new Schema({
       type: Number,
       default: 0
     }
-  },  
+  },
   followers: [
     {
       type: Schema.Types.ObjectId,

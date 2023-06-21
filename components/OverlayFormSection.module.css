@@ -1,0 +1,186 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 120;
+  display: flex;
+  justify-content: center;
+}
+
+.overlayContent {
+  width: 550px;
+  height: 350px;
+  background-color: #282828;
+  border-radius: 10px;
+  margin-top: 8%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.overlayHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlayHeader h2 {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.overlayHeader .closeBtn {
+  color: #fff;
+  cursor: pointer;
+}
+
+.overlayHeader .closeBtn i {
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.overlayBody {
+  width: 100%;
+  height: 100%;
+}
+
+.overlayBody form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputSection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.imageInput {
+  width: 300px;
+  min-height: 180px;
+  background-color: #3e3e3e;
+  border-radius: 5px;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.imageInput img{
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.imageInput input {
+  display: none;
+}
+
+.editPhoto{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.editPhoto p{
+    font-size: 18px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+}
+
+.editPhoto p:hover{
+    text-decoration: underline;
+}
+
+.imageInput:hover .editPhoto{
+    visibility: visible;
+    transition: all 0.3s ease-in-out;
+}
+
+.rightSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.formGroup {
+  width: 100%;
+  padding: 0 8px;
+  background-color: #3e3e3e;
+  border-radius: 6px;
+}
+
+.formGroup input {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+.formGroup textarea {
+  max-width: 250px;
+  max-height: 100px;
+  min-height: 100px;
+  min-width: 250px;
+  font-size: 16px;
+  font-weight: 400;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.formGroup input::placeholder {
+  color: #9e9e9e;
+}
+
+.createBtn{
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    padding: 0 20px;
+    line-height: 50px;
+    background-color: #fff;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}

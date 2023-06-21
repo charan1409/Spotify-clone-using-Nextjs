@@ -1,14 +1,20 @@
 "use client";
 import styles from "./PlaylistSection.module.css";
 import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import OverlayFormSection from "./OverlayFormSection";
 
 const PlaylistSection = () => {
+  const [providers, setProviders] = useState(null);
   const [submenu, setSubmenu] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
+  const [overlay, setoverlay] = useState(false);
   const submenuRef = useRef(null);
   const loginPopupRef = useRef(null);
   const { data: session } = useSession();
+  const router = useRouter();
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (submenuRef.current && !submenuRef.current.contains(e.target)) {
@@ -18,11 +24,20 @@ const PlaylistSection = () => {
         setLoginPopup(false);
       }
     };
+    const fetchProviders = async () => {
+      const response = await getProviders();
+      setProviders(response);
+    };
+    fetchProviders();
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
+  const closeOverlay = () => {
+    setoverlay(false);
+  };
   return (
     <div className={styles.playlist_section}>
       <div className={styles.nav_bar}>
@@ -37,7 +52,14 @@ const PlaylistSection = () => {
             <i
               className={`bi bi-plus ${styles.add}`}
               title="create new playlist"
-              onClick={() => setLoginPopup(true)}
+              onClick={() => {
+                if (session?.user) {
+                  setLoginPopup(false);
+                  setoverlay(true);
+                } else {
+                  setLoginPopup(true);
+                }
+              }}
             ></i>
           </span>
         </div>
@@ -97,7 +119,14 @@ const PlaylistSection = () => {
           <p>It's easy - we'll help you.</p>
           <button
             className={styles.createButton}
-            onClick={() => setLoginPopup(true)}
+            onClick={() => {
+              if (session?.user) {
+                setLoginPopup(false)
+                setoverlay(true);
+              } else {
+                setLoginPopup(true);
+              }
+            }}
           >
             Create Playlist
           </button>
@@ -119,11 +148,30 @@ const PlaylistSection = () => {
               <p className={styles.login_popup_text}>
                 To create a playlist, you need to login first.
               </p>
-              <button className={styles.login_popup_button}>Login</button>
+              <div className={styles.loginPopupBtns}>
+                <button
+                  className={styles.not_now_button}
+                  onClick={() => setLoginPopup(false)}
+                >
+                  Not now
+                </button>
+                {providers &&
+                  Object.values(providers).map((provider) => (
+                    <div key={provider.name}>
+                      <button
+                        className={styles.login_popup_button}
+                        onClick={() => signIn(provider.id)}
+                      >
+                        Sign in with {provider.name}
+                      </button>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
       )}
+      {overlay && <OverlayFormSection content={'Create playlist'} closeOverlay={closeOverlay}/>}
     </div>
   );
 };

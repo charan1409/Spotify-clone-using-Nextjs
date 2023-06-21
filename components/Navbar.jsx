@@ -2,12 +2,14 @@
 import styles from "./Navbar.module.css";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Navbar = (props) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const submenuRef = useRef(null);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [providers, setProviders] = useState(null);
 
@@ -32,10 +34,10 @@ const Navbar = (props) => {
     <div className={styles.navigational_bar}>
       <div className={styles.left_section}>
         <div className={styles.navigational_arrows}>
-          <span>
+          <span onClick={() => router.back()}>
             <i className="bi bi-chevron-left"></i>
           </span>
-          <span>
+          <span onClick={() => router.forward()}>
             <i className="bi bi-chevron-right"></i>
           </span>
         </div>
@@ -60,12 +62,16 @@ const Navbar = (props) => {
               <div className={styles.submenu} ref={submenuRef}>
                 <ul>
                   <li>
-                    <Link href="/profile">Profile</Link>
+                    <Link href={`/profile/${session?.user.id}`}>Profile</Link>
                   </li>
-                  <li>
-                    <Link href="/settings">Settings</Link>
+                  <li
+                    onClick={() => {
+                      router.replace("/");
+                      signOut();
+                    }}
+                  >
+                    Logout
                   </li>
-                  <li onClick={signOut}>Logout</li>
                 </ul>
               </div>
             )}

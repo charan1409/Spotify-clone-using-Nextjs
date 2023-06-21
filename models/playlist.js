@@ -5,19 +5,17 @@ const playlistSchema = new Schema({
         type: String,
         required: true,
     },
-    // owner details reference
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
+        required: true,
     },
-    // collaborators details reference
     collaborators: [
         {
             type: Schema.Types.ObjectId,
             ref: "User",
         },
     ],
-    // songs details reference
     songs: [
         {
             type: Schema.Types.ObjectId,
@@ -26,7 +24,13 @@ const playlistSchema = new Schema({
     ],
     public: {
         type: Boolean,
-        required: true,
+        default: false,
+    },
+    description: {
+        type: String,
+    },
+    image: {
+        type: String,
     },
 });
 
