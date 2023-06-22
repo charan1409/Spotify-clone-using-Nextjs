@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Navbar from "@/components/Navbar";
 import styles from "../Profile.module.css";
 import OverlayFormSection from "@/components/OverlayFormSection";
@@ -12,13 +12,13 @@ const page = () => {
   const { data: session } = useSession();
   const [userData, setUserData] = useState({});
   useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await fetch(`/api/profile/${userId}`);
-      const data = await response.json();
-      return setUserData(data);
-    }
     fetchUserData();
   }, []);
+  const fetchUserData = async () => {
+    const response = await fetch(`/api/profile/${userId}`);
+    const data = await response.json();
+    return setUserData(data);
+  };
   return (
     <div>
       <Navbar page={"profile"} />
@@ -28,8 +28,14 @@ const page = () => {
         </div>
         <div className={styles.profileInfo}>
           <h1>{userData.username}</h1>
-          <p>{userData?.following?.length && userData.following.length} following</p>
-          <button type="button" className={styles.editProfile} onClick={() => setoverlay(true)}>
+          <p>
+            {userData?.following?.length && userData.following.length} following
+          </p>
+          <button
+            type="button"
+            className={styles.editProfile}
+            onClick={() => setoverlay(true)}
+          >
             <i className="bi bi-pencil-square"></i>Edit profile
           </button>
         </div>
@@ -41,7 +47,12 @@ const page = () => {
         </div>
       </div>
       {overlay && (
-        <OverlayFormSection content="Edit profile" closeOverlay={() => setoverlay(false)} userdata={userData}/>
+        <OverlayFormSection
+          content="Edit profile"
+          closeOverlay={() => setoverlay(false)}
+          formdata={userData}
+          updateProfile={fetchUserData}
+        />
       )}
     </div>
   );

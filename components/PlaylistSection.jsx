@@ -2,7 +2,6 @@
 import styles from "./PlaylistSection.module.css";
 import { useState, useEffect, useRef } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import OverlayFormSection from "./OverlayFormSection";
 
 const PlaylistSection = () => {
@@ -10,10 +9,11 @@ const PlaylistSection = () => {
   const [submenu, setSubmenu] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
   const [overlay, setoverlay] = useState(false);
+  const [playlists, setPlaylists] = useState([]);
+
   const submenuRef = useRef(null);
   const loginPopupRef = useRef(null);
   const { data: session } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -29,6 +29,12 @@ const PlaylistSection = () => {
       setProviders(response);
     };
     fetchProviders();
+    const fetchPlaylists = async () => {
+      const response = await fetch(`/api/playlist/${session?.user.id}`);
+      const data = await response.json();
+      return setPlaylists(data);
+    };
+    fetchPlaylists();
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
@@ -38,6 +44,13 @@ const PlaylistSection = () => {
   const closeOverlay = () => {
     setoverlay(false);
   };
+
+  const updatePlaylists = async () => {
+    const response = await fetch(`/api/playlist/${session?.user.id}`);
+    const data = await response.json();
+    return setPlaylists(data);
+  };
+
   return (
     <div className={styles.playlist_section}>
       <div className={styles.nav_bar}>
@@ -70,7 +83,7 @@ const PlaylistSection = () => {
           </div>
         )}
       </div>
-      {session?.user && session.user.playlists ? (
+      {session?.user && playlists.length !== 0 ? (
         <div className={styles.playlists_artists}>
           <div className={styles.top_bar}>
             <span className={styles.search_icon}>
@@ -101,8 +114,8 @@ const PlaylistSection = () => {
             </div>
           </div>
           <div className={styles.playlists}>
-            {session.user.playlists.map((playlist) => (
-              <div className={styles.playlist} key={playlist.id}>
+            {playlists.map((playlist) => (
+              <div className={styles.playlist} key={playlist._id}>
                 <img
                   src="https://picsum.photos/60"
                   alt="playlist"
@@ -121,7 +134,7 @@ const PlaylistSection = () => {
             className={styles.createButton}
             onClick={() => {
               if (session?.user) {
-                setLoginPopup(false)
+                setLoginPopup(false);
                 setoverlay(true);
               } else {
                 setLoginPopup(true);
@@ -171,7 +184,13 @@ const PlaylistSection = () => {
           </div>
         </div>
       )}
-      {overlay && <OverlayFormSection content={'Create playlist'} closeOverlay={closeOverlay}/>}
+      {overlay && (
+        <OverlayFormSection
+          content={"Create playlist"}
+          closeOverlay={closeOverlay}
+          updatePlaylists={updatePlaylists}
+        />
+      )}
     </div>
   );
 };

@@ -7,12 +7,11 @@ export const GET = async (req, { params }) => {
     await connectToDatabase();
     const user = await User.findOne({ _id: userId });
     const data = {
-        username: user.name,
-        profilePhoto: user.image,
-        userId: user._id,
-        following: user.following,
-
-    }
+      username: user.name,
+      profilePhoto: user.image,
+      userId: user._id,
+      following: user.following,
+    };
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.log(error);

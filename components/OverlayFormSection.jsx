@@ -3,20 +3,22 @@ import styles from "./OverlayFormSection.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-const OverlayFormSection = ({ content, closeOverlay, userdata }) => {
+const OverlayFormSection = ({
+  content,
+  closeOverlay,
+  formdata,
+  updatePlaylists,
+  updateProfile
+}) => {
   const imageInputRef = useRef(null);
   const overlayContentRef = useRef(null);
   const { data: session } = useSession();
 
   const [inputKey, setInputKey] = useState("");
-
-  const [playlistInfo, setPlaylistInfo] = useState({
-    playlistName: "",
-    playlistDescription: "",
-    playlistImage: "",
-  });
-  const [name, setName] = useState(`${userdata ? userdata.username : ""}`);
+  const [fname, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -27,6 +29,19 @@ const OverlayFormSection = ({ content, closeOverlay, userdata }) => {
         closeOverlay();
       }
     };
+    if (content === "Edit profile") {
+      setName(formdata.username);
+      setImageURL(formdata.profilePic);
+    } else if (content === "edit playlist") {
+      setName(formdata.playlistName);
+      setDescription(formdata.playlistDescription);
+      setImageURL(formdata.playlistImage);
+    } else {
+      setName("");
+      setDescription("");
+      setImage(null);
+      setImageURL("");
+    }
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
@@ -39,11 +54,11 @@ const OverlayFormSection = ({ content, closeOverlay, userdata }) => {
     formData.append("file", image);
     formData.append("upload_preset", "Spotify_Clone_Pics");
     try {
-      if (playlistInfo.playlistName === "") {
-        alert("Please enter a playlist name");
+      if (fname === "") {
+        alert("Please enter a name");
         return;
       }
-      if (playlistInfo.playlistImage !== "") {
+      if (image !== "") {
         const { secure_url } = await fetch(
           "https://api.cloudinary.com/v1_1/dfw9gsnzx/image/upload",
           {
@@ -51,38 +66,46 @@ const OverlayFormSection = ({ content, closeOverlay, userdata }) => {
             body: formData,
           }
         ).then((res) => res.json());
-        setPlaylistInfo({ ...playlistInfo, playlistImage: secure_url });
+        setImageURL(secure_url);
       }
-      const data = {
-        playlistName: playlistInfo.playlistName,
-        playlistDescription: playlistInfo.playlistDescription,
-        playlistImage: playlistInfo.playlistImage,
-        userId: session?.user.id,
-      };
-      alert(playlistInfo.userId);
-      console.log(playlistInfo);
-      const res = await fetch("/api/playlist", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        closeOverlay();
+      if (content === "Edit profile") {
+        const data = {
+          username: fname,
+          profilePic: imageURL,
+          userId: session?.user.id,
+        };
+        const res = await fetch("/api/profile", {
+          method: "PUT",
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          updateProfile();
+          closeOverlay();
+        }
+      } else {
+        const data = {
+          playlistName: fname,
+          playlistDescription: description,
+          playlistImage: imageURL,
+          userId: session?.user.id,
+        };
+        const res = await fetch("/api/playlist", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          updatePlaylists();
+          closeOverlay();
+        }
       }
     } catch (error) {
       console.log(error);
     } finally {
-      setPlaylistInfo({
-        playlistName: "",
-        playlistDescription: "",
-        playlistImage: "",
-      });
+      setName("");
+      setDescription("");
       setImage(null);
+      setImageURL("");
     }
-  };
-
-  const handleUserSubmit = (e) => {
-    e.preventDefault();
-    alert(useinfo);
   };
 
   return (
@@ -135,28 +158,17 @@ const OverlayFormSection = ({ content, closeOverlay, userdata }) => {
                         type="text"
                         name="name"
                         placeholder="Playlist name"
-                        value={name}
-                        onChange={(e) =>
-                          setPlaylistInfo({
-                            ...playlistInfo,
-                            playlistName: e.target.value,
-                          })
-                        }
+                        value={fname}
+                        onChange={(e) => setName(e.target.value)}
                       />
                     </div>
                     {content !== "Edit profile" && (
                       <div className={styles.formGroup}>
                         <textarea
-                          name="playlistDescription"
-                          id="playlistDescription"
+                          name="description"
                           placeholder="Add an optional description"
-                          value={playlistInfo.playlistDescription}
-                          onChange={(e) =>
-                            setPlaylistInfo({
-                              ...playlistInfo,
-                              playlistDescription: e.target.value,
-                            })
-                          }
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
                         ></textarea>
                       </div>
                     )}
