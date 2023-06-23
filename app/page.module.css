@@ -2,8 +2,16 @@
   height: 100%;
   overflow: auto;
 }
-.testing{
-  height: 100px;
-  width: 100%;
-  background-color: #ffffff6e;
+
+.body{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.greeting{
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
 }

@@ -8,7 +8,7 @@
   position: relative;
 }
 
-.top_heading{
+.top_heading {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -36,7 +36,7 @@
   transform: rotate(270deg);
 }
 
-.right_icons{
+.right_icons {
   vertical-align: middle;
   position: absolute;
   right: 0;
@@ -44,93 +44,66 @@
   color: #8b8b8b;
 }
 
-.right_icons .add{
+.right_icons .add {
   margin-right: 10px;
   padding: 0 2px;
   position: relative;
 }
 
-.right_icons .add:hover{
+.right_icons .add:hover {
   cursor: pointer;
   background-color: #191919;
   border-radius: 50%;
   color: #fff;
 }
 
-.options{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 28px;
-  margin-bottom: 10px;
-}
-
-.options_button{
-  background-color: #1f1f1f;
-  width: auto;
-  height: 35px;
-  color: #fff;
-  padding: 0 10px;
-  margin-right: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
-.options_button:hover{
+.options_button:hover {
   cursor: pointer;
   background-color: #242424;
 }
 
-.playlist_section .playlists_artists{
+.playlist_section .playlists_artists {
   overflow: auto;
 }
 
-.top_bar{
+.top_bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 10px;
-  height: 30px;
+  height: 40px;
   width: 100%;
+  padding-right: 30px;
 }
 
-.search_icon{
+.search_icon {
   color: #8b8b8b;
   font-size: 19px;
   padding: 6px 8px;
 }
 
-.search_icon:hover{
+.search_icon:hover {
   cursor: pointer;
   color: #fff;
   background-color: #191919;
   border-radius: 50%;
 }
 
-.sort_options{  
-  display: flex;
-  align-items: center;
-  width: auto;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.sort_options .sort_option{
+.search_input{
+  width: 100%;
+  height: 100%;
+  background-color: #191919;
+  border: none;
+  outline: none;
   color: #fff;
   font-size: 16px;
+  padding: 0 10px;
+  border-radius: 4px;
+  padding: 4px 10px;
 }
 
-.sort_options .options_arrow{
-  color: #fff;
-  font-size: 19px;
-  padding: 6px 8px;
-}
-
-.playlists{
+.playlists {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -140,7 +113,7 @@
   height: calc(87vh - 300px);
 }
 
-.playlists .playlist{
+.playlists .playlist {
   display: flex;
   align-items: center;
   width: 100%;
@@ -149,19 +122,24 @@
   cursor: pointer;
 }
 
-.playlists .playlist:hover{
+.playlists .playlist:hover {
   background-color: #191919;
   border-radius: 5px;
 }
 
-.playlists .playlist .playlist_image{
+.active {
+  background-color: #191919;
+  border-radius: 5px;
+}
+
+.playlists .playlist .playlist_image {
   width: 50px;
   height: 50px;
   border-radius: 5px;
   margin-right: 10px;
 }
 
-.playlists .playlist .playlist_name{
+.playlists .playlist .playlist_name {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -169,44 +147,7 @@
   margin-left: 10px;
 }
 
-.submenu{
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 200px;
-  background-color: #191919;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  margin-top: 4px;
-  overflow: hidden;
-  z-index: 4;
-}
-
-.submenu ul{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.submenu ul li{
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 10px;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.submenu ul li:hover{
-  background-color: #282828;
-}
-
-.createPlaylist{
+.createPlaylist {
   background-color: #242424;
   width: 100%;
   height: 150px;
@@ -220,18 +161,18 @@
   margin-top: 20px;
 }
 
-.createPlaylist h4{
+.createPlaylist h4 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
 }
 
-.createPlaylist p{
+.createPlaylist p {
   font-size: 14px;
   margin-bottom: 10px;
 }
 
-.createButton{
+.createButton {
   background-color: #fff;
   font-size: 16px;
   margin-right: 10px;
@@ -243,20 +184,20 @@
   cursor: pointer;
 }
 
-.login_popup{
+.login_popup {
   position: absolute;
   top: 10%;
   left: 100%;
   width: 400px;
   background-color: #0d72ea;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin-top: 4px;
   overflow: hidden;
   z-index: 4;
 }
 
-.login_popup .login_popup_content{
+.login_popup .login_popup_content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -264,7 +205,7 @@
   padding: 20px;
 }
 
-.login_popup .login_popup_header{
+.login_popup .login_popup_header {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -272,20 +213,20 @@
   margin-bottom: 10px;
 }
 
-.login_popup_heading{
+.login_popup_heading {
   font-size: 16px;
   font-weight: 600;
   color: #fff;
 }
 
-.login_popup_close{
+.login_popup_close {
   font-size: 16px;
   color: #fff;
   margin-left: auto;
   cursor: pointer;
 }
 
-.login_popup_body{
+.login_popup_body {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -293,20 +234,20 @@
   align-items: flex-start;
 }
 
-.login_popup_body p{
+.login_popup_body p {
   font-size: 14px;
   color: #fff;
   margin-bottom: 10px;
 }
 
-.loginPopupBtns{
+.loginPopupBtns {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-.not_now_button{
+.not_now_button {
   font-size: 16px;
   margin-right: 10px;
   padding: 10px 10px;
@@ -321,11 +262,11 @@
   background-color: transparent;
 }
 
-.not_now_button:hover{
+.not_now_button:hover {
   color: #fff;
 }
 
-.login_popup_button{
+.login_popup_button {
   background-color: #fff;
   font-size: 16px;
   margin-right: 10px;

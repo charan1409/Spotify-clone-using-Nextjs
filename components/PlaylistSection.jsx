@@ -3,23 +3,21 @@ import styles from "./PlaylistSection.module.css";
 import { useState, useEffect, useRef } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
 import OverlayFormSection from "./OverlayFormSection";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const PlaylistSection = () => {
+  const path = usePathname();
   const [providers, setProviders] = useState(null);
-  const [submenu, setSubmenu] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
   const [overlay, setoverlay] = useState(false);
   const [playlists, setPlaylists] = useState([]);
 
-  const submenuRef = useRef(null);
   const loginPopupRef = useRef(null);
   const { data: session } = useSession();
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (submenuRef.current && !submenuRef.current.contains(e.target)) {
-        setSubmenu(false);
-      }
       if (loginPopupRef.current && !loginPopupRef.current.contains(e.target)) {
         setLoginPopup(false);
       }
@@ -39,7 +37,7 @@ const PlaylistSection = () => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []);
+  }, [session?.user]);
 
   const closeOverlay = () => {
     setoverlay(false);
@@ -76,12 +74,6 @@ const PlaylistSection = () => {
             ></i>
           </span>
         </div>
-        {session?.user && (
-          <div className={styles.options}>
-            <p className={styles.options_button}>Playlists</p>
-            <p className={styles.options_button}>Artists</p>
-          </div>
-        )}
       </div>
       {session?.user && playlists.length !== 0 ? (
         <div className={styles.playlists_artists}>
@@ -89,40 +81,26 @@ const PlaylistSection = () => {
             <span className={styles.search_icon}>
               <i className="bi bi-search"></i>
             </span>
-            <div
-              className={styles.sort_options}
-              ref={submenuRef}
-              onClick={() => setSubmenu((prev) => !prev)}
-            >
-              <p className={styles.sort_option}>Recents</p>
-              <span className={styles.options_arrow}>
-                <i
-                  className={
-                    submenu ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"
-                  }
-                ></i>
-              </span>
-              {submenu && (
-                <div className={styles.submenu}>
-                  <ul>
-                    <li>Recents</li>
-                    <li>Recently Added</li>
-                    <li>Alphabetical</li>
-                  </ul>
-                </div>
-              )}
-            </div>
+            <input
+              type="text"
+              placeholder="Search for playlists"
+              className={styles.search_input}
+            />
           </div>
           <div className={styles.playlists}>
             {playlists.map((playlist) => (
-              <div className={styles.playlist} key={playlist._id}>
-                <img
-                  src="https://picsum.photos/60"
-                  alt="playlist"
-                  className={styles.playlist_image}
-                />
-                <p className={styles.playlist_name}>{playlist.name}</p>
-              </div>
+              <Link href={`/playlist/${playlist._id}`} key={playlist._id}>
+                <div className={`${styles.playlist} ${
+                  path === `/playlist/${playlist._id}` ? styles.active : ""
+                }`}>
+                  <img
+                    src="https://picsum.photos/60"
+                    alt="playlist"
+                    className={styles.playlist_image}
+                  />
+                  <p className={styles.playlist_name}>{playlist.name}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
