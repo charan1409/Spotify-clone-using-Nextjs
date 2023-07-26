@@ -1,11 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
 const songSchema = new Schema({
-    songId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     title: {
         type: String,
         required: true
@@ -26,8 +21,8 @@ const songSchema = new Schema({
         type: String,
         required: true,
     },
-    duration: {
-        type: Number,
+    month: {
+        type: String,
         required: true,
     },
     image: {
