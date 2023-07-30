@@ -16,12 +16,6 @@ const userSchema = new Schema({
       ref: "Playlist",
     },
   ],
-  likedSongs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Song",
-    },
-  ],
   recentlyPlayed: {
     song: {
       type: Schema.Types.ObjectId,

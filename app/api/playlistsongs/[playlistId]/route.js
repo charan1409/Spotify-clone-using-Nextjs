@@ -6,7 +6,7 @@ export const GET = async (req, { params }) => {
   try {
     await connectToDatabase();
     const playlist = await Playlist.findOne({ _id: playlistId }).populate(
-        "collaborators"
+        "songs"
     );
     return new Response(JSON.stringify(playlist), { status: 200 });
   } catch (error) {

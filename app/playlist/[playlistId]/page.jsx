@@ -31,16 +31,35 @@ const page = () => {
             <p>{playlistData?.songs?.length} songs</p>
           </div>
         </div>
-        {/* <div className={styles.playlist__songs}>
-          <div className={styles.playlist__icons}>
-            <PlayCircleFilledIcon className={styles.playlist__shuffle} />
-            <FavoriteIcon fontSize="large" />
-            <MoreHorizIcon />
+        <div className={styles.playlistBtns}>
+          {playlistData?.songs?.length > 0 && (
+            <span className={styles.playBtn}>
+              <i className="bi bi-play-fill"></i>
+            </span>
+          )}
+        </div>
+        {playlistData?.songs?.length > 0 && (
+          <div className={styles.playlistSongs}>
+            <div className={styles.playlistSongs__header}>
+              <span>#</span>
+              <span>TITLE</span>
+              <span>ALBUM</span>
+              <span>ARTIST</span>
+              <span>YEAR</span>
+            </div>
+            {playlistData?.songs?.map((song) => (
+              <div key={song?._id} className={styles.songsData__info}>
+                <img src={song?.image} alt="" />
+                <div className={styles.songsData__infoText}>
+                  <span>{song?.title}</span>
+                  <span>{song?.album}</span>
+                  <span>{song?.artist}</span>
+                  <span>{song?.year}</span>
+                </div>
+              </div>
+            ))}
           </div>
-          {playlistData?.songs?.map((song) => (
-            <SongRow track={song.track} />
-          ))}
-        </div> */}
+        )}
       </div>
     </>
   );
