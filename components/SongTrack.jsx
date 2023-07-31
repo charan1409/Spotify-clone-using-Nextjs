@@ -2,17 +2,37 @@
 import styles from "./SongTrack.module.css";
 import { useState, useEffect, useRef } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
+import { useSelector } from "react-redux";
 
 const SongTrack = () => {
   const [providers, setProviders] = useState(null);
+  const [song, setSong] = useState(null);
   const { data: session } = useSession();
+  const songId = useSelector((state) => state.queueReducer.songId);
+  console.log(songId)
   useEffect(() => {
     const fetchProviders = async () => {
       const response = await getProviders();
       setProviders(response);
     };
     fetchProviders();
+    const fetchSong = async () => {
+      const response = await fetch(`api/song/${songId}`);
+      const data = await response.json();
+      return setSong(data);
+    };
+    fetchSong();
   }, []);
+
+  useEffect(() => {
+    const fetchSong = async () => {
+      const response = await fetch(`api/song/${songId}`);
+      const data = await response.json();
+      console.log(data)
+      return setSong(data);
+    };
+    fetchSong();
+  }, [songId])
 
   return (
     <>
@@ -20,15 +40,12 @@ const SongTrack = () => {
         <div className={styles.songtrack}>
           <div
             className={`${styles.song_info} ${
-              session?.user && session?.user.recentlyPlayed && styles.active
+              session?.user && songId && styles.active
             }`}
           >
-            <img src="https://picsum.photos/60" alt="song_pic" />
+            <img src={song?.image} alt="song_pic" />
             <div className={styles.song_details}>
-              <h3>
-                {session?.user.recentlyPlayed &&
-                  session?.user.recentlyPlayed.song.title}
-              </h3>
+              <h3>{song?.title}</h3>
               <p>
                 {session?.user.recentlyPlayed &&
                   session?.user.recentlyPlayed.song.artist}

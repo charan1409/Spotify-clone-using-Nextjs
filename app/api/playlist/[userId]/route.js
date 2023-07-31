@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/utils/database";
+import Playlist from "@/models/playlist";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
 

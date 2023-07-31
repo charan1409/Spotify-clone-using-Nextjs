@@ -3,12 +3,15 @@ import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import styles from "./Search.module.css";
 import { useSession } from "next-auth/react";
+import { currentSong } from "@/redux/queueSlice";
+import { useDispatch } from "react-redux";
 
 const page = () => {
   const { data: session } = useSession();
   const [songs, setSongs] = useState([]);
   const [overlay, setoverlay] = useState(false);
   const [playlists, setPlaylists] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -38,13 +41,19 @@ const page = () => {
     console.log(data);
     return setoverlay(false);
   };
+
+  const playSong = (songId) => {
+    console.log("dispatching action with id " + songId)
+    dispatch(currentSong(songId));
+  };
+
   return (
     <>
       <Navbar page={"search"} />
       <div className={styles.songsData}>
         {songs?.map((song) => (
           <div key={song?._id} className={styles.songsData__info}>
-            <img src={song?.image} alt="" />
+            <img src={song?.image} alt="" onClick={playSong(song?._id)}/>
             <div className={styles.songsData__infoText}>
               <span>{song?.title}</span>
               <span>{song?.album}</span>

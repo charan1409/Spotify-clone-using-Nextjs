@@ -4,6 +4,7 @@ import HomeSection from "@/components/HomeSection";
 import PlaylistSection from "@/components/PlaylistSection";
 import SongTrack from "@/components/SongTrack";
 import Provider from "@/components/Provider";
+import { ReduxProvider } from "@/redux/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,18 +23,20 @@ export default function RootLayout({ children }) {
         ></link>
       </head>
       <body className={inter.className}>
-        <Provider>
-          <div className="layout">
-            <div className="home_playtlist_section">
-              <HomeSection />
-              <PlaylistSection />
+        <ReduxProvider>
+          <Provider>
+            <div className="layout">
+              <div className="home_playtlist_section">
+                <HomeSection />
+                <PlaylistSection />
+              </div>
+              <div className="pages_section">{children}</div>
             </div>
-            <div className="pages_section">{children}</div>
-          </div>
-          <div className="songtrackSection">
-            <SongTrack />
-          </div>
-        </Provider>
+            <div className="songtrackSection">
+              <SongTrack />
+            </div>
+          </Provider>
+        </ReduxProvider>
       </body>
     </html>
   );

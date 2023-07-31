@@ -28,9 +28,11 @@ const PlaylistSection = () => {
     };
     fetchProviders();
     const fetchPlaylists = async () => {
-      const response = await fetch(`/api/playlist/${session?.user.id}`);
-      const data = await response.json();
-      return setPlaylists(data);
+      if(session?.user){
+        const response = await fetch(`/api/playlist/${session?.user.id}`);
+        const data = await response.json();
+        return setPlaylists(data);
+      }
     };
     fetchPlaylists();
     document.addEventListener("mousedown", handleOutsideClick);

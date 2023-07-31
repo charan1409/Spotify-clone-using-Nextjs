@@ -66,11 +66,10 @@ const Navbar = (props) => {
                   </li>
                   <li
                     onClick={() => {
-                      router.replace("/");
                       signOut();
                     }}
                   >
-                    Logout
+                    <Link href="/">Logout</Link>
                   </li>
                 </ul>
               </div>

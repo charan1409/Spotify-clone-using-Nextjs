@@ -1,5 +1,6 @@
 import { connectToDatabase } from "@/utils/database";
 import Playlist from "@/models/playlist";
+import Song from "@/models/song";
 
 export const GET = async (req, { params }) => {
   const { playlistId } = params;
