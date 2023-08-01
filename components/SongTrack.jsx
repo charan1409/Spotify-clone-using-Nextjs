@@ -1,5 +1,6 @@
 "use client";
 import styles from "./SongTrack.module.css";
+import VolumeSlider from "./VolumeSlider/VolumeSlider";
 import { useState, useEffect, useRef } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
 import { useSelector } from "react-redux";
@@ -7,9 +8,11 @@ import { useSelector } from "react-redux";
 const SongTrack = () => {
   const [providers, setProviders] = useState(null);
   const [song, setSong] = useState(null);
+  const [volume, setVolume] = useState(100);
+
   const { data: session } = useSession();
   const songId = useSelector((state) => state.queueReducer.songId);
-  console.log(songId)
+
   useEffect(() => {
     const fetchProviders = async () => {
       const response = await getProviders();
@@ -28,50 +31,63 @@ const SongTrack = () => {
     const fetchSong = async () => {
       const response = await fetch(`api/song/${songId}`);
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       return setSong(data);
     };
     fetchSong();
-  }, [songId])
+  }, [songId]);
+
+  const handleVolumeChange = (newVolume) => {
+    setVolume(newVolume);
+  };
 
   return (
     <>
       {session?.user ? (
         <div className={styles.songtrack}>
-          <div
-            className={`${styles.song_info} ${
-              session?.user && songId && styles.active
-            }`}
-          >
-            <img src={song?.image} alt="song_pic" />
-            <div className={styles.song_details}>
-              <h3>{song?.title}</h3>
-              <p>
-                {session?.user.recentlyPlayed &&
-                  session?.user.recentlyPlayed.song.artist}
-              </p>
+          {session?.user && songId ? (
+            <div className={styles.song_info}>
+              <img src={song?.image} alt="song_pic" />
+              <div className={styles.song_details}>
+                <h3>{song?.title}</h3>
+                <p>{song && song?.artist}</p>
+              </div>
             </div>
-            <i className="bi bi-heart"></i>
-          </div>
+          ) : (
+            <div className={styles.nothing}></div>
+          )}
           <div className={styles.player_track}>
-            <div className={styles.options}>
-              <i className="bi bi-shuffle"></i>
-              <i className="bi bi-chevron-bar-left"></i>
-              <i className="bi bi-pause-circle-fill"></i>
-              <i className="bi bi-chevron-bar-right"></i>
-              <i className="bi bi-repeat"></i>
-            </div>
             <div className={styles.player}>
-              <span className={styles.time}>00:00</span>
-              <div className={styles.line}></div>
-              <div className={styles.circle}></div>
-              <span className={styles.time}>03:45</span>
+              {song ? (
+                <audio className={styles.audioPlayer} controls>
+                  <source src={song?.file} type="audio/mpeg" />
+                </audio>
+              ) : (
+                <>
+                  <div className={styles.options}>
+                    <i className="bi bi-shuffle"></i>
+                    <i className="bi bi-chevron-bar-left"></i>
+                    <i className="bi bi-pause-circle-fill"></i>
+                    <i className="bi bi-chevron-bar-right"></i>
+                    <i className="bi bi-repeat"></i>
+                  </div>
+                  <span className={styles.time}>--:--</span>
+                  <div className={styles.line}></div>
+                  <span className={styles.time}>--:--</span>
+                </>
+              )}
             </div>
           </div>
           <div className={styles.song_options}>
             <i className="bi bi-music-note" title="lyrics"></i>
             <i className="bi bi-music-note-list" title="queue"></i>
-            <i className="bi bi-volume-up-fill" title="mute"></i>
+            <span className={styles.volumeControl}>
+              <i className="bi bi-volume-up-fill" title="mute"></i>
+              <VolumeSlider
+                volume={volume}
+                onVolumeChange={handleVolumeChange}
+              />
+            </span>
           </div>
         </div>
       ) : (

@@ -4,12 +4,16 @@ import styles from "../Playlist.module.css";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
+import { currentSong } from "@/redux/queueSlice";
+import { useDispatch } from "react-redux";
 
 const page = () => {
   const [overlay, setoverlay] = useState(false);
   const { playlistId } = useParams();
   const { data: session } = useSession();
   const [playlistData, setPlaylistData] = useState({});
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchPlaylistData = async () => {
       const response = await fetch(`/api/playlistsongs/${playlistId}`);
@@ -18,6 +22,12 @@ const page = () => {
     };
     fetchPlaylistData();
   }, []);
+
+  const playSong = (songId) => {
+    alert(songId);
+    dispatch(currentSong(songId));
+  };
+
   return (
     <>
       <Navbar />
@@ -39,26 +49,33 @@ const page = () => {
           )}
         </div>
         {playlistData?.songs?.length > 0 && (
-          <div className={styles.playlistSongs}>
-            <div className={styles.playlistSongs__header}>
-              <span>#</span>
-              <span>TITLE</span>
-              <span>ALBUM</span>
-              <span>ARTIST</span>
-              <span>YEAR</span>
-            </div>
-            {playlistData?.songs?.map((song) => (
-              <div key={song?._id} className={styles.songsData__info}>
-                <img src={song?.image} alt="" />
-                <div className={styles.songsData__infoText}>
-                  <span>{song?.title}</span>
-                  <span>{song?.album}</span>
-                  <span>{song?.artist}</span>
-                  <span>{song?.year}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>TITLE</th>
+                <th>ALBUM</th>
+                <th>ARTIST</th>
+                <th>YEAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              {playlistData?.songs?.map((song, index) => (
+                <tr key={song?._id}>
+                  <td onClick={playSong(song?._id)}>{index + 1}</td>
+                  <td>
+                    <span className={styles.title}>
+                      <img src={song?.image} alt="" />
+                      {song?.title}
+                    </span>
+                  </td>
+                  <td>{song?.album}</td>
+                  <td>{song?.artist}</td>
+                  <td>{song?.year}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </>

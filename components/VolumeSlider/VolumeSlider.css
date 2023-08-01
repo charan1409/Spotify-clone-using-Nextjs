@@ -1,0 +1,13 @@
+input[type="range"] {
+  width: 90px;
+  height: 5px;
+  border-radius: 20px;
+  accent-color: #fff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="range"]:hover{
+    accent-color: #1db954;
+}

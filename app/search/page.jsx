@@ -43,7 +43,6 @@ const page = () => {
   };
 
   const playSong = (songId) => {
-    console.log("dispatching action with id " + songId)
     dispatch(currentSong(songId));
   };
 
