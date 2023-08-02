@@ -4,7 +4,8 @@ import styles from "../Playlist.module.css";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { currentSong } from "@/redux/queueSlice";
+import { currentSong, removeSong } from "@/redux/songSlice";
+import { addSong } from "@/redux/queueSlice";
 import { useDispatch } from "react-redux";
 
 const page = () => {
@@ -12,6 +13,7 @@ const page = () => {
   const { playlistId } = useParams();
   const { data: session } = useSession();
   const [playlistData, setPlaylistData] = useState({});
+  const [isPlaying, setIsPlaying] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,12 +23,20 @@ const page = () => {
       return setPlaylistData(data);
     };
     fetchPlaylistData();
-  }, []);
+  
+    const playPlaylist = () => {
+      if(playlistData){
+        dispatch(removeSong());
+        dispatch(addSong(playlistData?.songs));
+      }
+    };
+    if (isPlaying) {
+      if (playlistData?.songs?.length > 0) {
+        playPlaylist();
+      }
+    }
+  }, [isPlaying]);
 
-  const playSong = (songId) => {
-    alert(songId);
-    dispatch(currentSong(songId));
-  };
 
   return (
     <>
@@ -43,9 +53,11 @@ const page = () => {
         </div>
         <div className={styles.playlistBtns}>
           {playlistData?.songs?.length > 0 && (
-            <span className={styles.playBtn}>
+            <button className={styles.playBtn} onClick={() => {
+              setIsPlaying(true);
+            }}>
               <i className="bi bi-play-fill"></i>
-            </span>
+            </button>
           )}
         </div>
         {playlistData?.songs?.length > 0 && (
@@ -62,7 +74,11 @@ const page = () => {
             <tbody>
               {playlistData?.songs?.map((song, index) => (
                 <tr key={song?._id}>
-                  <td onClick={playSong(song?._id)}>{index + 1}</td>
+                  <td>
+                    <button onClick={() => {
+                      setIsPlaying(true);
+                    }} className={styles.songPlayBtn}><i className="bi bi-play-fill"></i></button>
+                  </td>
                   <td>
                     <span className={styles.title}>
                       <img src={song?.image} alt="" />

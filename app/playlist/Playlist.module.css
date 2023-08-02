@@ -49,15 +49,20 @@
 .playlistBtns .playBtn{
     background-color: #1db954;
     color: #1c1c1c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 60px;
     width: 60px;
     border-radius: 50%;
     border: none;
     font-size: 35px;
     cursor: pointer;
+}
+
+.playlistBtns .playBtn:hover{
+    background-color: #1ed760;
+}
+
+.playlistBtns .playBtn:focus{
+    outline: none;
 }
 
 .playlist table{
@@ -89,10 +94,6 @@
     font-weight: 600;
 }
 
-.playlist table tbody tr{
-    cursor: pointer;
-}
-
 .playlist table tbody tr td{
     text-align: left;
 }
@@ -107,4 +108,19 @@
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+}
+
+.songPlayBtn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.songPlayBtn i{
+    font-size: 25px;
+    color: white;
+}
+
+.songPlayBtn i:hover{
+    color: #1db954;
 }

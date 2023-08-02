@@ -3,15 +3,24 @@ import styles from "./SongTrack.module.css";
 import VolumeSlider from "./VolumeSlider/VolumeSlider";
 import { useState, useEffect, useRef } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { currentSong, removeSong, shuffleQueue } from "@/redux/songSlice";
+import { set } from "mongoose";
 
 const SongTrack = () => {
   const [providers, setProviders] = useState(null);
   const [song, setSong] = useState(null);
   const [volume, setVolume] = useState(100);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [currentTime, setCurrentTime] = useState(-1);
+  const [duration, setDuration] = useState(0);
+
+  const dispatch = useDispatch();
+  const audioRef = useRef(null);
 
   const { data: session } = useSession();
-  const songId = useSelector((state) => state.queueReducer.songId);
+  const songId = useSelector((state) => state.songReducer.songId);
+  const queue = useSelector((state) => state.queueReducer.queue);
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -19,26 +28,97 @@ const SongTrack = () => {
       setProviders(response);
     };
     fetchProviders();
+    const addSongToCurrentSong = () => {
+      if (queue?.length > 0) {
+        dispatch(currentSong(queue[0]._id));
+      }
+    };
+    addSongToCurrentSong();
     const fetchSong = async () => {
-      const response = await fetch(`api/song/${songId}`);
-      const data = await response.json();
-      return setSong(data);
+      if (songId) {
+        const response = await fetch(`/api/song/${songId}`);
+        const data = await response.json();
+        return setSong(data);
+      }
     };
     fetchSong();
   }, []);
 
   useEffect(() => {
     const fetchSong = async () => {
-      const response = await fetch(`api/song/${songId}`);
-      const data = await response.json();
-      console.log(data);
-      return setSong(data);
+      if (songId) {
+        const response = await fetch(`/api/song/${songId}`);
+        const data = await response.json();
+        return setSong(data);
+      }
     };
     fetchSong();
   }, [songId]);
 
+  useEffect(() => {
+    const addSongToCurrentSong = () => {
+      if (queue.length > 0) {
+        dispatch(currentSong(queue[0]._id));
+      }
+    };
+    addSongToCurrentSong();
+  }, [queue]);
+
+  useEffect(() => {
+    const handleTimeUpdate = () => {
+      if (audioRef.current) {
+        setCurrentTime(audioRef.current.currentTime);
+      }
+    };
+
+    const handleLoadedMetadata = () => {
+      if (audioRef.current) {
+        setDuration(audioRef.current.duration);
+      }
+    };
+
+    if (audioRef.current) {
+      audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+      audioRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+      audioRef.current.volume = volume / 100;
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          handleLoadedMetadata
+        );
+      }
+    };
+  }, [audioRef.current, volume]);
+
+  useEffect(() => {
+    if(currentTime === duration){
+      setIsPlaying(false);
+    }
+  }, [currentTime]);
+
   const handleVolumeChange = (newVolume) => {
     setVolume(newVolume);
+  };
+
+  const formatDuration = (duration) => {
+    if (!isNaN(duration)) {
+      const minutes = Math.floor(duration / 60);
+      const seconds = Math.floor(duration % 60);
+      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    } else {
+      return "--:--";
+    }
+  };
+
+  const handleRestart = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
   };
 
   return (
@@ -46,7 +126,11 @@ const SongTrack = () => {
       {session?.user ? (
         <div className={styles.songtrack}>
           {session?.user && songId ? (
-            <div className={styles.song_info}>
+            <div
+              className={`${
+                song === null ? styles.song_info_disable : styles.song_info
+              }`}
+            >
               <img src={song?.image} alt="song_pic" />
               <div className={styles.song_details}>
                 <h3>{song?.title}</h3>
@@ -58,24 +142,61 @@ const SongTrack = () => {
           )}
           <div className={styles.player_track}>
             <div className={styles.player}>
-              {song ? (
-                <audio className={styles.audioPlayer} controls>
-                  <source src={song?.file} type="audio/mpeg" />
-                </audio>
-              ) : (
-                <>
-                  <div className={styles.options}>
-                    <i className="bi bi-shuffle"></i>
-                    <i className="bi bi-chevron-bar-left"></i>
-                    <i className="bi bi-pause-circle-fill"></i>
-                    <i className="bi bi-chevron-bar-right"></i>
-                    <i className="bi bi-repeat"></i>
-                  </div>
-                  <span className={styles.time}>--:--</span>
+              <div className={styles.options}>
+                <audio
+                  className={styles.audioPlayer}
+                  src={song?.file}
+                  ref={audioRef}
+                  controls
+                  autoPlay
+                ></audio>
+                <div
+                  className={`${
+                    song === null
+                      ? styles.controlBtnsDisable
+                      : styles.controlBtns
+                  }`}
+                >
+                  <i className="bi bi-shuffle"></i>
+                  <i
+                    className="bi bi-chevron-bar-left"
+                    onClick={handleRestart}
+                  ></i>
+                  {isPlaying ? (
+                    <i
+                      className="bi bi-pause-fill"
+                      onClick={() => {
+                        audioRef.current.pause();
+                        setIsPlaying(false);
+                      }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="bi bi-play-fill"
+                      onClick={() => {
+                        if(currentTime === duration){
+                          handleRestart();
+                          setIsPlaying(true);
+                        } else{
+                          audioRef.current.play();
+                          setIsPlaying(true);
+                        }
+                      }}
+                    ></i>
+                  )}
+                  <i className="bi bi-chevron-bar-right"></i>
+                  <i className="bi bi-repeat"></i>
+                </div>
+                <span className={styles.timeline}>
+                  <span className={styles.time}>
+                    <p>{formatDuration(currentTime)}</p>
+                  </span>
                   <div className={styles.line}></div>
-                  <span className={styles.time}>--:--</span>
-                </>
-              )}
+                  <span className={styles.time}>
+                    <p>{formatDuration(duration)}</p>
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
           <div className={styles.song_options}>

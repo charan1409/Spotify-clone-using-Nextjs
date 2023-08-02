@@ -1,6 +1,5 @@
 import { connectToDatabase } from "@/utils/database";
 import Song from "@/models/song";
-import { NextResponse } from "next/server";
 
 export const GET = async (req, { params }) => {
     const { songId } = params;

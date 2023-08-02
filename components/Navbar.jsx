@@ -64,12 +64,16 @@ const Navbar = (props) => {
                   <li>
                     <Link href={`/profile/${session?.user.id}`}>Profile</Link>
                   </li>
-                  <li
-                    onClick={() => {
-                      signOut();
-                    }}
-                  >
-                    <Link href="/">Logout</Link>
+                  <li>
+                    <Link
+                      href="/"
+                      onClick={async () => {
+                        await signOut();
+                        router.push("/");
+                      }}
+                    >
+                      Logout
+                    </Link>
                   </li>
                 </ul>
               </div>

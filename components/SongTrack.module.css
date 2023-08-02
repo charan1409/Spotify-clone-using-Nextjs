@@ -17,6 +17,17 @@
   padding: 4px;
 }
 
+.song_info_disable{
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 4px;
+  visibility: hidden;
+}
+
 .nothing{
   flex: 1;
   display: flex;
@@ -46,20 +57,43 @@
 
 .songtrack .player_track .options {
   display: flex;
-  gap: 40px;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   padding: 10px;
 }
 
-.songtrack .player_track .options i {
+.controlBtns, .controlBtnsDisable{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  padding: 2px 10px;
   font-size: 20px;
+}
+
+.controlBtns > i{
+  cursor: pointer;
+}
+
+.controlBtns > i:hover{
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.controlBtnsDisable > i{
   cursor: not-allowed;
 }
 
-.songtrack .player_track .options i:hover {
-  color: #fff;
+.timeline{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
 }
 
 .player {
@@ -118,6 +152,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.audioPlayer{
+  display: none;
 }
 
 .signInBlock{

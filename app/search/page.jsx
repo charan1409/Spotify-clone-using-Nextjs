@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import styles from "./Search.module.css";
 import { useSession } from "next-auth/react";
-import { currentSong } from "@/redux/queueSlice";
+import { currentSong } from "@/redux/songSlice";
 import { useDispatch } from "react-redux";
 
 const page = () => {
