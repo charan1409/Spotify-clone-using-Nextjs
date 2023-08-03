@@ -4,7 +4,7 @@ import styles from "../Playlist.module.css";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { currentSong, removeSong } from "@/redux/songSlice";
+import { removeSong } from "@/redux/songSlice";
 import { addSong } from "@/redux/queueSlice";
 import { useDispatch } from "react-redux";
 

@@ -1,11 +1,10 @@
 "use client";
 import styles from "./SongTrack.module.css";
 import VolumeSlider from "./VolumeSlider/VolumeSlider";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { signIn, useSession, getProviders } from "next-auth/react";
 import { useSelector, useDispatch } from "react-redux";
-import { currentSong, removeSong, shuffleQueue } from "@/redux/songSlice";
-import { set } from "mongoose";
+import { currentSong } from "@/redux/songSlice";
 
 const SongTrack = () => {
   const [providers, setProviders] = useState(null);
@@ -20,6 +19,7 @@ const SongTrack = () => {
 
   const { data: session } = useSession();
   const songId = useSelector((state) => state.songReducer.songId);
+  const play = useSelector((state) => state.songReducer.play);
   const queue = useSelector((state) => state.queueReducer.queue);
 
   useEffect(() => {
@@ -54,6 +54,19 @@ const SongTrack = () => {
     };
     fetchSong();
   }, [songId]);
+
+  useEffect(() => {
+    const pauseSong = () => {
+      if (play === false) {
+        setIsPlaying(false);
+        audioRef?.current?.pause();
+      } else{
+        setIsPlaying(true);
+        audioRef?.current?.play();
+      }
+    };
+    pauseSong();
+  }, [play]);
 
   useEffect(() => {
     const addSongToCurrentSong = () => {
@@ -165,7 +178,6 @@ const SongTrack = () => {
                       : styles.controlBtns
                   }`}
                 >
-                  <i className="bi bi-shuffle"></i>
                   <i
                     className="bi bi-chevron-bar-left"
                     onClick={() => {
@@ -204,7 +216,6 @@ const SongTrack = () => {
                       setIsPlaying(true);
                     }}
                   ></i>
-                  <i className="bi bi-repeat"></i>
                 </div>
                 <span className={styles.timeline}>
                   <span className={styles.time}>
@@ -229,8 +240,6 @@ const SongTrack = () => {
             </div>
           </div>
           <div className={styles.song_options}>
-            <i className="bi bi-music-note" title="lyrics"></i>
-            <i className="bi bi-music-note-list" title="queue"></i>
             <span className={styles.volumeControl}>
               {volume > 0 ? (
                 <i

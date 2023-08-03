@@ -68,7 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 60px;
   width: 100%;
   padding: 2px 10px;
   font-size: 20px;
@@ -80,7 +80,7 @@
 
 .controlBtns > i:hover{
   color: #fff;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .controlBtnsDisable > i{
@@ -131,9 +131,8 @@
 .songtrack .song_options {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
   width: 100%;
   padding: 4px;
   position: relative;
