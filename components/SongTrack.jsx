@@ -13,7 +13,7 @@ const SongTrack = () => {
   const [volume, setVolume] = useState(100);
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(-1);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(-2);
 
   const dispatch = useDispatch();
   const audioRef = useRef(null);
@@ -95,7 +95,7 @@ const SongTrack = () => {
   }, [audioRef.current, volume]);
 
   useEffect(() => {
-    if(currentTime === duration){
+    if (currentTime === duration) {
       setIsPlaying(false);
     }
   }, [currentTime]);
@@ -105,7 +105,7 @@ const SongTrack = () => {
   };
 
   const formatDuration = (duration) => {
-    if (!isNaN(duration)) {
+    if (!isNaN(duration) && !(duration < 0)) {
       const minutes = Math.floor(duration / 60);
       const seconds = Math.floor(duration % 60);
       return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
@@ -118,6 +118,14 @@ const SongTrack = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.play();
+    }
+  };
+
+  const handleSeek = (event) => {
+    if (audioRef.current) {
+      const seekTime = parseFloat(event.target.value);
+      audioRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
     }
   };
 
@@ -160,11 +168,15 @@ const SongTrack = () => {
                   <i className="bi bi-shuffle"></i>
                   <i
                     className="bi bi-chevron-bar-left"
-                    onClick={handleRestart}
+                    onClick={() => {
+                      handleRestart();
+                      setIsPlaying(true);
+                    }}
                   ></i>
                   {isPlaying ? (
                     <i
                       className="bi bi-pause-fill"
+                      style={{ fontSize: "30px" }}
                       onClick={() => {
                         audioRef.current.pause();
                         setIsPlaying(false);
@@ -173,25 +185,42 @@ const SongTrack = () => {
                   ) : (
                     <i
                       className="bi bi-play-fill"
+                      style={{ fontSize: "30px" }}
                       onClick={() => {
-                        if(currentTime === duration){
+                        if (currentTime === duration) {
                           handleRestart();
                           setIsPlaying(true);
-                        } else{
+                        } else {
                           audioRef.current.play();
                           setIsPlaying(true);
                         }
                       }}
                     ></i>
                   )}
-                  <i className="bi bi-chevron-bar-right"></i>
+                  <i
+                    className="bi bi-chevron-bar-right"
+                    onClick={() => {
+                      handleRestart();
+                      setIsPlaying(true);
+                    }}
+                  ></i>
                   <i className="bi bi-repeat"></i>
                 </div>
                 <span className={styles.timeline}>
                   <span className={styles.time}>
                     <p>{formatDuration(currentTime)}</p>
                   </span>
-                  <div className={styles.line}></div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={duration}
+                    value={currentTime}
+                    onChange={handleSeek}
+                    step={0.1}
+                    className={`${
+                      song ? styles.progressInput : styles.progressInputDisable
+                    }`}
+                  />
                   <span className={styles.time}>
                     <p>{formatDuration(duration)}</p>
                   </span>
@@ -203,7 +232,17 @@ const SongTrack = () => {
             <i className="bi bi-music-note" title="lyrics"></i>
             <i className="bi bi-music-note-list" title="queue"></i>
             <span className={styles.volumeControl}>
-              <i className="bi bi-volume-up-fill" title="mute"></i>
+              {volume > 0 ? (
+                <i
+                  className="bi bi-volume-up-fill"
+                  onClick={() => setVolume(0)}
+                ></i>
+              ) : (
+                <i
+                  className="bi bi-volume-mute-fill"
+                  onClick={() => setVolume(100)}
+                ></i>
+              )}
               <VolumeSlider
                 volume={volume}
                 onVolumeChange={handleVolumeChange}

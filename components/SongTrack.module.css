@@ -61,7 +61,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: 6px;
 }
 
 .controlBtns, .controlBtnsDisable{
@@ -104,23 +104,23 @@
   align-items: center;
 }
 
-.line {
+.progressInput{
   flex-grow: 1;
-  height: 2px;
+  height: 5px;
   background-color: #fff;
-  margin: 0 10px;
+  margin: 0 5px;
   position: relative;
+  cursor: pointer;
 }
 
-.circle {
-  width: 8px;
-  height: 8px;
-  background-color: #000;
-  border-radius: 50%;
-  position: absolute;
-  top: -3px;
-  left: 0;
-  transform: translateX(-50%);
+.progressInputDisable{
+  width: 100%;
+  flex-grow: 1;
+  height: 5px;
+  background-color: #fff;
+  margin: 0 5px;
+  position: relative;
+  cursor: not-allowed;
 }
 
 .time {
