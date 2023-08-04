@@ -201,6 +201,7 @@ const PlaylistSection = () => {
       )}
       {confimationMsg && (
         <ConfirmationOverlay
+          justMsg={false}
           confirmationMsg={confimationMsg}
           closeOverlay={() => setConfirmationMsg(null)}
           handleConfirmation={handleConfirmation}

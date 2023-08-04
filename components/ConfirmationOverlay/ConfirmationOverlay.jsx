@@ -1,11 +1,12 @@
 "use client";
 import styles from "./ConfirmationOverlay.module.css";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const ConfirmationOverlay = ({
   confirmationMsg,
   closeOverlay,
   handleConfirmation,
+  justMsg,
 }) => {
   const overlayRef = useRef(null);
 
@@ -28,20 +29,22 @@ const ConfirmationOverlay = ({
             <i className="bi bi-x"></i>
           </span>
           <h1>{confirmationMsg}</h1>
-          <div className={styles.buttonContainer}>
-            <button
-              className={styles.buttonNo}
-              onClick={() => handleConfirmation(false)}
-            >
-              No
-            </button>
-            <button
-              className={styles.buttonYes}
-              onClick={() => handleConfirmation(true)}
-            >
-              Yes
-            </button>
-          </div>
+          {!justMsg && (
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.buttonNo}
+                onClick={() => handleConfirmation(false)}
+              >
+                No
+              </button>
+              <button
+                className={styles.buttonYes}
+                onClick={() => handleConfirmation(true)}
+              >
+                Yes
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

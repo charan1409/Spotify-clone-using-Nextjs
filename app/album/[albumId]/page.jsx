@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { currentSong } from "@/redux/songSlice";
 import { useDispatch } from "react-redux";
+import ConfirmationOverlay from "@/components/ConfirmationOverlay/ConfirmationOverlay";
 
 const page = () => {
   const [overlay, setoverlay] = useState(false);
@@ -13,6 +14,7 @@ const page = () => {
   const [songs, setSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [confirmationMsg, setConfirmationMsg] = useState(null);
   const { data: session } = useSession();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -65,22 +67,25 @@ const page = () => {
     playAlbum();
   }, [isPlaying]);
 
-  const addToPlaylist = async () => {
-    const response = await fetch(`/api/playlist/${session?.user.id}`);
-    const data = await response.json();
-    setPlaylists(data);
+  const openOverlay = async () => {
     return setoverlay(true);
   };
 
   const saveToPlaylist = async (playlistId, songId) => {
-    const response = await fetch(`/api/playlist/add/${playlistId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ songId }),
-    });
+    const response = await fetch(
+      `/api/playlist/add/${playlistId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ songId }),
+      }
+    );
     const data = await response.json();
+    if (data?.msg) {
+      setConfirmationMsg(data.msg);
+    }
     return setoverlay(false);
   };
 
@@ -121,7 +126,7 @@ const page = () => {
               <span>{song?.artist}</span>
               <span>{song?.year}</span>
             </div>
-            <span className={styles.moreOptions} onClick={addToPlaylist}>
+            <span className={styles.moreOptions} onClick={openOverlay}>
               Add
               {overlay && (
                 <div className={styles.overlay} ref={overlayCloseRef}>
@@ -130,7 +135,7 @@ const page = () => {
                       <div
                         key={playlist?._id}
                         className={styles.playlistName}
-                        onClick={saveToPlaylist(playlist._id, song._id)}
+                        onClick={() => saveToPlaylist(playlist?._id, song?._id)}
                       >
                         <h5>{playlist.name}</h5>
                       </div>
@@ -146,6 +151,13 @@ const page = () => {
           </div>
         ))}
       </div>
+      {confirmationMsg && (
+        <ConfirmationOverlay
+          justMsg={true}
+          confirmationMsg={confirmationMsg}
+          closeOverlay={() => setConfirmationMsg(null)}
+        />
+      )}
     </div>
   );
 };

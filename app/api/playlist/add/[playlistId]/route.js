@@ -9,9 +9,12 @@ export const POST = async (req, { params }) => {
     await connectToDatabase();
     const playlist = await Playlist.findOne({ _id: playlistId });
     if (playlist.songs.includes(songId)) {
-      return new NextResponse("Song already exists in playlist", {
-        status: 400,
-      });
+      return new NextResponse(
+        JSON.stringify({ msg: "Song already exists in playlist" }),
+        {
+          status: 400,
+        }
+      );
     }
     playlist.songs.push(songId);
     await playlist.save();
@@ -23,6 +26,8 @@ export const POST = async (req, { params }) => {
     });
   } catch (error) {
     console.log(error);
-    return new NextResponse("Playlist not found", { status: 500 });
+    return new NextResponse(JSON.stringify({ msg: "Playlist Not found" }), {
+      status: 500,
+    });
   }
 };
