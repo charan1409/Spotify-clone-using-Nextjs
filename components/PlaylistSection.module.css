@@ -147,6 +147,25 @@
   margin-left: 10px;
 }
 
+.deleteIcon{
+  color: #8b8b8b;
+  font-size: 19px;
+  padding: 6px 8px;
+  margin-left: auto;
+  opacity: 0;
+}
+
+.deleteIcon:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: #191919;
+  border-radius: 50%;
+}
+
+.playlist:hover .deleteIcon{
+  opacity: 1;
+}
+
 .createPlaylist {
   background-color: #242424;
   width: 100%;

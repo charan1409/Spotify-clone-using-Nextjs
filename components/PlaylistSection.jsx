@@ -5,6 +5,7 @@ import { signIn, useSession, getProviders } from "next-auth/react";
 import OverlayFormSection from "./OverlayFormSection";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ConfirmationOverlay from "./ConfirmationOverlay/ConfirmationOverlay";
 
 const PlaylistSection = () => {
   const path = usePathname();
@@ -12,8 +13,10 @@ const PlaylistSection = () => {
   const [loginPopup, setLoginPopup] = useState(false);
   const [overlay, setoverlay] = useState(false);
   const [playlists, setPlaylists] = useState([]);
+  const [confimationMsg, setConfirmationMsg] = useState(null);
 
   const loginPopupRef = useRef(null);
+  const playlistRef = useRef(null);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -49,6 +52,29 @@ const PlaylistSection = () => {
     const response = await fetch(`/api/playlist/${session?.user.id}`);
     const data = await response.json();
     return setPlaylists(data);
+  };
+
+  const handleConfirmationOverlay = async (playlistName, playlistId) => {
+    setConfirmationMsg(`Are you sure you want to delete ${playlistName}?`);
+    playlistRef.current = playlistId;
+  };
+
+  const handleConfirmation = async (response) => {
+    if (response) {
+      handleDeletePlaylist(playlistRef.current);
+    } else {
+      setConfirmationMsg(null);
+    }
+  };
+
+  const handleDeletePlaylist = async (playlistId) => {
+    const response = await fetch(`/api/playlist/${session?.user.id}/${playlistId}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    console.log(data);
+    updatePlaylists();
+    setConfirmationMsg(null);
   };
 
   return (
@@ -101,6 +127,10 @@ const PlaylistSection = () => {
                     className={styles.playlist_image}
                   />
                   <p className={styles.playlist_name}>{playlist.name}</p>
+                  <span className={styles.deleteIcon} onClick={(e) => {
+                    e.preventDefault();
+                    handleConfirmationOverlay(playlist.name, playlist._id);
+                  }}><i className="bi bi-trash"></i></span>
                 </div>
               </Link>
             ))}
@@ -169,6 +199,13 @@ const PlaylistSection = () => {
           content={"Create playlist"}
           closeOverlay={closeOverlay}
           updatePlaylists={updatePlaylists}
+        />
+      )}
+      {confimationMsg && (
+        <ConfirmationOverlay
+          confirmationMsg={confimationMsg}
+          closeOverlay={() => setConfirmationMsg(null)}
+          handleConfirmation={handleConfirmation}
         />
       )}
     </div>

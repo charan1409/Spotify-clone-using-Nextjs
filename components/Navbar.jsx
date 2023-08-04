@@ -69,7 +69,6 @@ const Navbar = (props) => {
                       href="/"
                       onClick={async () => {
                         await signOut();
-                        router.push("/");
                       }}
                     >
                       Logout

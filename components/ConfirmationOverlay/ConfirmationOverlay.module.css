@@ -1,0 +1,76 @@
+.overlayBackground{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+}
+
+.overlay{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 400px;
+    height: 200px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.overlayContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.overlayContent .closeBtn{
+    font-size: 30px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.overlayContent .closeBtn:hover{
+    transform: scale(1.2);
+}
+
+.overlayContent h1{
+    font-size: 20px;
+    font-weight: 600;
+    margin: 2px 0px 20px 0px;
+}
+
+.overlayContent .buttonContainer{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+    margin-right: 70px
+}
+
+.overlayContent .buttonContainer button{
+    width: auto;
+    padding: 10px 30px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.overlayContent .buttonContainer button:hover{
+    transform: scale(1.1);
+}
+
+.overlayContent .buttonContainer .buttonYes{
+    background-color: #1fdf64;
+}
+
+.overlayContent .buttonContainer .buttonNo{
+    background-color: #fff;
+}

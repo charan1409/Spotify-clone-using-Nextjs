@@ -4,13 +4,21 @@ import styles from "../Profile.module.css";
 import OverlayFormSection from "@/components/OverlayFormSection";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const page = () => {
   const [overlay, setoverlay] = useState(false);
   const { userId } = useParams();
   const { data: session } = useSession();
+  const router = useRouter();
   const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    if (!session?.user) {
+      router.push("/");
+    }
+  }, [session?.user]);
+
   useEffect(() => {
     fetchUserData();
   }, []);

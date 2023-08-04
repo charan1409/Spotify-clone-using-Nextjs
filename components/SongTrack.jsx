@@ -60,7 +60,7 @@ const SongTrack = () => {
       if (play === false) {
         setIsPlaying(false);
         audioRef?.current?.pause();
-      } else{
+      } else {
         setIsPlaying(true);
         audioRef?.current?.play();
       }
@@ -240,23 +240,25 @@ const SongTrack = () => {
             </div>
           </div>
           <div className={styles.song_options}>
-            <span className={styles.volumeControl}>
-              {volume > 0 ? (
-                <i
-                  className="bi bi-volume-up-fill"
-                  onClick={() => setVolume(0)}
-                ></i>
-              ) : (
-                <i
-                  className="bi bi-volume-mute-fill"
-                  onClick={() => setVolume(100)}
-                ></i>
-              )}
-              <VolumeSlider
-                volume={volume}
-                onVolumeChange={handleVolumeChange}
-              />
-            </span>
+            {song && (
+              <span className={styles.volumeControl}>
+                {volume > 0 ? (
+                  <i
+                    className="bi bi-volume-up-fill"
+                    onClick={() => setVolume(0)}
+                  ></i>
+                ) : (
+                  <i
+                    className="bi bi-volume-mute-fill"
+                    onClick={() => setVolume(100)}
+                  ></i>
+                )}
+                <VolumeSlider
+                  volume={volume}
+                  onVolumeChange={handleVolumeChange}
+                />
+              </span>
+            )}
           </div>
         </div>
       ) : (

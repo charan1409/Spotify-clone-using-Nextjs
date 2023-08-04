@@ -1,9 +1,9 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import styles from "../Playlist.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { removeSong } from "@/redux/songSlice";
 import { addSong } from "@/redux/queueSlice";
 import { useDispatch } from "react-redux";
@@ -12,9 +12,16 @@ const page = () => {
   const [overlay, setoverlay] = useState(false);
   const { playlistId } = useParams();
   const { data: session } = useSession();
+  const router = useRouter();
   const [playlistData, setPlaylistData] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!session?.user) {
+      router.push("/");
+    }
+  }, [session?.user]);
 
   useEffect(() => {
     const fetchPlaylistData = async () => {
@@ -23,9 +30,9 @@ const page = () => {
       return setPlaylistData(data);
     };
     fetchPlaylistData();
-  
+
     const playPlaylist = () => {
-      if(playlistData){
+      if (playlistData) {
         dispatch(removeSong());
         dispatch(addSong(playlistData?.songs));
       }
@@ -36,7 +43,6 @@ const page = () => {
       }
     }
   }, [isPlaying]);
-
 
   return (
     <>
@@ -53,9 +59,12 @@ const page = () => {
         </div>
         <div className={styles.playlistBtns}>
           {playlistData?.songs?.length > 0 && (
-            <button className={styles.playBtn} onClick={() => {
-              setIsPlaying(true);
-            }}>
+            <button
+              className={styles.playBtn}
+              onClick={() => {
+                setIsPlaying(true);
+              }}
+            >
               <i className="bi bi-play-fill"></i>
             </button>
           )}
@@ -75,9 +84,14 @@ const page = () => {
               {playlistData?.songs?.map((song, index) => (
                 <tr key={song?._id}>
                   <td>
-                    <button onClick={() => {
-                      setIsPlaying(true);
-                    }} className={styles.songPlayBtn}><i className="bi bi-play-fill"></i></button>
+                    <button
+                      onClick={() => {
+                        setIsPlaying(true);
+                      }}
+                      className={styles.songPlayBtn}
+                    >
+                      <i className="bi bi-play-fill"></i>
+                    </button>
                   </td>
                   <td>
                     <span className={styles.title}>

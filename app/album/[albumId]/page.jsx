@@ -1,7 +1,8 @@
 "use client";
 import styles from "../album.module.css";
 import Navbar from "@/components/Navbar";
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { currentSong } from "@/redux/songSlice";
 import { useDispatch } from "react-redux";
@@ -14,6 +15,13 @@ const page = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { data: session } = useSession();
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session?.user) {
+      router.push("/");
+    }
+  }, [session?.user]);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -117,15 +125,21 @@ const page = () => {
               Add
               {overlay && (
                 <div className={styles.overlay} ref={overlayCloseRef}>
-                  {playlists?.map((playlist) => (
-                    <div
-                      key={playlist?._id}
-                      className={styles.playlistName}
-                      onClick={saveToPlaylist(playlist._id, song._id)}
-                    >
-                      <h5>{playlist.name}</h5>
+                  {playlists?.length > 0 ? (
+                    playlists?.map((playlist) => (
+                      <div
+                        key={playlist?._id}
+                        className={styles.playlistName}
+                        onClick={saveToPlaylist(playlist._id, song._id)}
+                      >
+                        <h5>{playlist.name}</h5>
+                      </div>
+                    ))
+                  ) : (
+                    <div className={styles.playlistName}>
+                      <h5>No playlists</h5>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </span>
