@@ -67,6 +67,8 @@ const OverlayFormSection = ({
           }
         ).then((res) => res.json());
         setImageURL(secure_url);
+      } else{
+        setImageURL("https://picsum.photos/200");
       }
       if (content === "Edit profile") {
         const data = {

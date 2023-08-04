@@ -49,8 +49,8 @@ const page = () => {
       <Navbar />
       <div className={styles.playlist}>
         <div className={styles.playlist__info}>
-          <img src={playlistData?.image} alt="" />
-          <div className={styles.playlist__infoText}>
+          <img src={playlistData?.image} alt="playlist_cover" />
+          <div className={styles.playlist__infoText}> 
             <strong>PLAYLIST</strong>
             <h2>{playlistData?.name}</h2>
             <p>{playlistData?.description}</p>

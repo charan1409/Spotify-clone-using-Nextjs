@@ -31,7 +31,7 @@ const PlaylistSection = () => {
     };
     fetchProviders();
     const fetchPlaylists = async () => {
-      if(session?.user){
+      if (session?.user) {
         const response = await fetch(`/api/playlist/${session?.user.id}`);
         const data = await response.json();
         return setPlaylists(data);
@@ -68,9 +68,12 @@ const PlaylistSection = () => {
   };
 
   const handleDeletePlaylist = async (playlistId) => {
-    const response = await fetch(`/api/playlist/${session?.user.id}/${playlistId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `/api/playlist/${session?.user.id}/${playlistId}`,
+      {
+        method: "DELETE",
+      }
+    );
     const data = await response.json();
     console.log(data);
     updatePlaylists();
@@ -104,37 +107,32 @@ const PlaylistSection = () => {
         </div>
       </div>
       {session?.user && playlists.length !== 0 ? (
-        <div className={styles.playlists_artists}>
-          <div className={styles.top_bar}>
-            <span className={styles.search_icon}>
-              <i className="bi bi-search"></i>
-            </span>
-            <input
-              type="text"
-              placeholder="Search for playlists"
-              className={styles.search_input}
-            />
-          </div>
-          <div className={styles.playlists}>
-            {playlists.map((playlist) => (
-              <Link href={`/playlist/${playlist._id}`} key={playlist._id}>
-                <div className={`${styles.playlist} ${
+        <div className={styles.playlists}>
+          {playlists.map((playlist) => (
+            <Link href={`/playlist/${playlist._id}`} key={playlist._id}>
+              <div
+                className={`${styles.playlist} ${
                   path === `/playlist/${playlist._id}` ? styles.active : ""
-                }`}>
-                  <img
-                    src="https://picsum.photos/60"
-                    alt="playlist"
-                    className={styles.playlist_image}
-                  />
-                  <p className={styles.playlist_name}>{playlist.name}</p>
-                  <span className={styles.deleteIcon} onClick={(e) => {
+                }`}
+              >
+                <img
+                  src="https://picsum.photos/60"
+                  alt="playlist"
+                  className={styles.playlist_image}
+                />
+                <p className={styles.playlist_name}>{playlist.name}</p>
+                <span
+                  className={styles.deleteIcon}
+                  onClick={(e) => {
                     e.preventDefault();
                     handleConfirmationOverlay(playlist.name, playlist._id);
-                  }}><i className="bi bi-trash"></i></span>
-                </div>
-              </Link>
-            ))}
-          </div>
+                  }}
+                >
+                  <i className="bi bi-trash"></i>
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       ) : (
         <div className={styles.createPlaylist}>
